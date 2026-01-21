@@ -138,6 +138,26 @@ exports.getAllProducts = async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 };
+// ***************************************************get services******************************************//
+exports.getAllServices = async (req, res) => {
+    try {
+        const { data: services, error } = await supabase
+            .from("services")
+            .select("*");
+
+        if (error) {
+            return res.status(500).json({ error: "Failed to fetch services" });
+        }
+
+        if (!services || services.length === 0) {
+            return res.status(404).json({ error: "No services found" });
+        }
+
+        res.status(200).json({ services });
+    } catch (err) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
 
 // ***************************************************get offers by service******************************************//
 exports.getOffersByService = async (req, res) => {
@@ -176,7 +196,7 @@ exports.getProfile = async (req, res) => {
     try {
         const { data: user, error } = await supabase
             .from('users')
-            .select('email, username, is_seller, created_at')
+            .select('email, username, is_seller,created_at,profile_picture')
             .eq('id', userId)
             .single();
 
