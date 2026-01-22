@@ -93,7 +93,7 @@ exports.postAdminLogin = async (req, res) => {
 
     // Set cookie (like user/seller login)
     res.cookie('token', token, {
-      httpOnly: false,
+      httpOnly: true,
       secure: false,        
       sameSite: 'none',      
       maxAge: 3 * 60 * 60 * 1000 
