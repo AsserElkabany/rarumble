@@ -271,6 +271,28 @@ exports.postAddGame = async (req, res) => {
     console.error("Unexpected error:", err);
     res.status(500).json({ error: "Unexpected server error" });
   }
-}
+};
+
+// ***************************************************get all products******************************************//
+exports.getproducts = async (req, res) => {
+  try {
+    const { data: products, error } = await supabase
+      .from('products')
+      .select('*');
+
+    if (error) {
+      console.error("Error fetching products:", error);
+      return res.status(500).json({ error: "Failed to fetch products" });
+    }
+
+    res.status(200).json(products);
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    res.status(500).json({ error: "Unexpected server error" });
+  }
+};
 
 // ***************************************************delete game******************************************//
+
+//**********************************************************************************************************//
+

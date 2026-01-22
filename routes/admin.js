@@ -10,5 +10,5 @@ router.get('/admin/getpaidorders', adminonly, adminController.getAllPaidOrders);
 router.post('/admin/block/:id', adminonly, adminController.postblockUser);
 router.post('/admin/unblock/:id', adminonly, adminController.postunblockUser);
 router.post('/admin/addgame', adminonly, adminController.postAddGame);
-
+router.get('/admin/products',adminonly,adminController.getproducts)
 module.exports = router;
