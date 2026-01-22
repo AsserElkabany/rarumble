@@ -3,12 +3,14 @@ const jwtkey = "8ca44b776f8562a8068d72b68a66761e73e9432cd8e06659be94936056072615
 
 const verify = (req, res, next) => {
     const token = req.cookies["token"];
+    console.log(token)
     if (!token) {
         return res.status(401).json({ error: "Token is required" });
     }
     try {
         const decoded = jwt.verify(token, jwtkey);
         //console.log({ "decoded token": decoded });
+        console.log(decoded)
 
         if (!decoded) {
             return res.status(401).json({ error: "Invalid token" });

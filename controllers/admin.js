@@ -95,7 +95,7 @@ exports.postAdminLogin = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: false,
       secure: false,        
-      sameSite: 'Lax',      
+      sameSite: 'none',      
       maxAge: 3 * 60 * 60 * 1000 
     });
 
