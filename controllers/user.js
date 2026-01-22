@@ -114,6 +114,7 @@ exports.postLogin = async (req, res) => {
     res.cookie("token", token, {
         httpOnly: true,
         secure: true,
+        //samesite to be the frontend domain 
         sameSite: "None",
         maxAge: 10 * 60 * 60 * 1000 
     });
@@ -281,5 +282,50 @@ exports.getUserPicture = async (req, res) => {
         res.status(200).json({ profilePicture: user.profile_picture });
     } catch (err) {
         res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+// ***************************************************change email******************************************//
+exports.putChangeEmail = async (req, res) => {
+    const userId = req.user_id;
+    const { newEmail } = req.body;
+
+    if (!userId) return res.status(401).json({ error: 'User not authenticated' });
+    if (!newEmail) return res.status(400).json({ error: 'New email is required' });
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newEmail)) {
+        return res.status(400).json({ error: 'Invalid email format' });
+    }
+
+    try {
+        
+        const { data: existingUser, error: checkError } = await supabase
+            .from('users')
+            .select('id')
+            .eq('email', newEmail)
+            .single();
+
+        if (checkError && checkError.code !== 'PGRST116') { 
+            return res.status(500).json({ error: 'Error checking email availability' });
+        }
+
+        if (existingUser) {
+            return res.status(400).json({ error: 'Email already in use' });
+        }
+
+        
+        const { error: updateError } = await supabase
+            .from('users')
+            .update({ email: newEmail })
+            .eq('id', userId);
+
+        if (updateError) {
+            return res.status(500).json({ error: 'Failed to update email' });
+        }
+
+        res.status(200).json({ message: 'Email updated successfully' });
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
     }
 };

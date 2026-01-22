@@ -227,10 +227,10 @@ exports.postunblockUser = async (req, res) => {
 exports.postAddGame = async (req, res) => {
   let { name, image, description, services } = req.body;
 
-  // Ensure services is always an array
+ 
   if (!Array.isArray(services)) {
     if (services) {
-      services = [services]; // wrap single service into array
+      services = [services]; 
     } else {
       return res.status(400).json({ error: 'Name, image, description, and at least one service are required.' });
     }
@@ -241,7 +241,7 @@ exports.postAddGame = async (req, res) => {
   }
 
   try {
-    // Insert game
+    
     const { data: game, error } = await supabase
       .from('products')
       .insert([{ name, image, description }])
@@ -253,7 +253,7 @@ exports.postAddGame = async (req, res) => {
       return res.status(500).json({ error: "Failed to add game" });
     }
 
-    // Insert services
+    
     for (let serviceId of services) {
       const { error: serviceError } = await supabase
         .from('product_services')
@@ -272,3 +272,5 @@ exports.postAddGame = async (req, res) => {
     res.status(500).json({ error: "Unexpected server error" });
   }
 }
+
+// ***************************************************delete game******************************************//
