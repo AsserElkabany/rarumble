@@ -188,6 +188,48 @@ exports.getOffersByService = async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 };
+// ***************************************************get games for a service******************************************//
+
+exports.getProductsByService = async (req, res) => {
+  try {
+    const serviceId = req.params.id;
+
+    if (!serviceId) {
+      return res.status(400).json({ error: "Service ID is required" });
+    }
+
+    const { data, error } = await supabase
+      .from("product_services")
+      .select(`
+        products (
+          id,
+          name,
+          image,
+          description
+        )
+      `)
+      .eq("service_id", serviceId);
+
+    if (error) {
+      console.error("Error fetching products:", error);
+      return res.status(500).json({ error: "Failed to fetch products" });
+    }
+
+    if (!data || data.length === 0) {
+      return res.status(404).json({ error: "No products found for this service" });
+    }
+
+    
+    const products = data.map(item => item.products);
+
+    res.status(200).json({ products });
+
+  } catch (err) {
+    console.error("Server error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 
 // ***************************************************get profile******************************************//
 exports.getProfile = async (req, res) => {

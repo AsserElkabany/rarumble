@@ -16,4 +16,5 @@ router.post('/user/changepassword', authentication, userController.postChangePas
 router.get('/user/picture/:id', authentication, userController.getUserPicture);
 router.get('/user/allservices',authentication,userController.getAllServices)
 router.put('/user/changeemail', authentication, userController.putChangeEmail);
+router.get('/user/services/:id/products',authentication,userController.getProductsByService)
 module.exports = router;
